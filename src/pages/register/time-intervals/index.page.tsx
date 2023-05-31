@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
 } from "@ignite-ui/react"
+import { api } from "@/src/lib/api"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm, Controller } from "react-hook-form"
 
@@ -95,18 +96,20 @@ export default function TimeIntervals() {
   })
 
   async function handleSetTimeIntervals(formData: any) {
-    const data = formData as TimeIntervalsFormOutput
+    const { intervals } = formData as TimeIntervalsFormOutput
 
-    console.log(data)
+    await api.post("/users/time-intervals", {
+      intervals,
+    })
   }
 
   return (
     <Container>
       <Header>
-        <Heading as="h1">Conecte sua agenda!</Heading>
+        <Heading as="h1">Quase lá</Heading>
         <Text>
-          Conecte o seu calendário para verificar automaticamente as horas
-          ocupadas e os novos eventos à medida em que são agendados.
+          Defina o intervalo de horário que você está disponível em cada dia da
+          semana.
         </Text>
 
         <MultiStep size={4} currentStep={3} />
