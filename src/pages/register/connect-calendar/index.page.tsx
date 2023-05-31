@@ -3,21 +3,19 @@ import { ArrowRight, Check } from "phosphor-react"
 import { signIn, useSession } from "next-auth/react"
 import { Button, Heading, MultiStep, Text } from "@ignite-ui/react"
 
-// import { api } from "../../lib/api"
-
-import { AuthError, ConnectBox, ConnectItem } from "./styles"
 import { Container, Header } from "../styles"
+import { AuthError, ConnectBox, ConnectItem } from "./styles"
 
 export default function ConnectCalendar() {
   const session = useSession()
   const router = useRouter()
 
-  console.log(session)
-
   const hasAuthError = router?.query?.error === "permissions"
   const isSignedId = session.status === "authenticated"
 
-  // async function handleRegister() {}
+  async function handleNavigateToNextStep() {
+    await router.push("/register/time-intervals")
+  }
 
   return (
     <Container>
@@ -58,7 +56,11 @@ export default function ConnectCalendar() {
           </AuthError>
         )}
 
-        <Button type="submit" disabled={!isSignedId}>
+        <Button
+          type="submit"
+          disabled={!isSignedId}
+          onClick={handleNavigateToNextStep}
+        >
           Próximo passo
           <ArrowRight />
         </Button>

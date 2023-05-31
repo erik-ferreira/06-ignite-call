@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "@ignite-ui/react"
 import { api } from "@/src/lib/api"
+import { useRouter } from "next/router"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm, Controller } from "react-hook-form"
 
@@ -66,6 +67,7 @@ type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
 type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export default function TimeIntervals() {
+  const router = useRouter()
   const weekDays = getWeekDays()
 
   const {
@@ -101,6 +103,8 @@ export default function TimeIntervals() {
     await api.post("/users/time-intervals", {
       intervals,
     })
+
+    await router.push("/register/update-profile")
   }
 
   return (
