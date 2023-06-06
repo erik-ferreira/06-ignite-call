@@ -60,4 +60,6 @@ export async function getGoogleOAuthToken(userId: string) {
       expiry_date,
     })
   }
+
+  return auth
 }
