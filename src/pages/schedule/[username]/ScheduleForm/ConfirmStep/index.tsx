@@ -1,10 +1,14 @@
 import { z } from "zod"
+import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarBlank, Clock } from "phosphor-react"
 import { Button, Text, TextArea, TextInput } from "@ignite-ui/react"
 
+import { api } from "@/src/lib/api"
+
 import { ConfirmForm, FormActions, FormError, FormHeader } from "./styles"
+import { useRouter } from "next/router"
 
 const confirmFormSchema = z.object({
   name: z.string().min(3, { message: "O nome precisa no mínimo 3 caracteres" }),
@@ -14,7 +18,18 @@ const confirmFormSchema = z.object({
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
-export function ConfirmStep() {
+interface ConfirmStepProps {
+  schedulingDate: Date
+  onRedirectToCalendarStep: () => void
+}
+
+export function ConfirmStep({
+  schedulingDate,
+  onRedirectToCalendarStep,
+}: ConfirmStepProps) {
+  const router = useRouter()
+  const username = String(router.query.username)
+
   const {
     register,
     handleSubmit,
@@ -23,18 +38,32 @@ export function ConfirmStep() {
     resolver: zodResolver(confirmFormSchema),
   })
 
-  function handleConfirmScheduling() {}
+  const describedDate = dayjs(schedulingDate).format("DD[ de]MMMM[ de ]YYYY")
+  const describedTime = dayjs(schedulingDate).format("HH:mm[h]")
+
+  async function handleConfirmScheduling(data: ConfirmFormData) {
+    const { name, email, observations } = data
+
+    await api.post(`/users/${username}/schedule`, {
+      name,
+      email,
+      observations,
+      date: schedulingDate,
+    })
+
+    onRedirectToCalendarStep()
+  }
 
   return (
     <ConfirmForm as="form" onSubmit={handleSubmit(handleConfirmScheduling)}>
       <FormHeader>
         <Text>
           <CalendarBlank />
-          01 de Junho de 2023
+          {describedDate}
         </Text>
         <Text>
           <Clock />
-          18:00h
+          {describedTime}
         </Text>
       </FormHeader>
 
@@ -62,7 +91,11 @@ export function ConfirmStep() {
       </label>
 
       <FormActions>
-        <Button type="button" variant="tertiary">
+        <Button
+          type="button"
+          variant="tertiary"
+          onClick={onRedirectToCalendarStep}
+        >
           Cancelar
         </Button>
         <Button type="submit">Confirmar</Button>
