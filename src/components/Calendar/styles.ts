@@ -26,27 +26,6 @@ export const CalendarActions = styled("div", {
   display: "flex",
   gap: "$2",
   color: "$gray200",
-
-  button: {
-    all: "unset",
-
-    cursor: "pointer",
-    lineHeight: 0,
-    borderRadius: "$sm",
-
-    svg: {
-      width: "$5",
-      height: "$5",
-    },
-
-    "&:hover": {
-      color: "$gray100",
-    },
-
-    "&:focus": {
-      boxShadow: "0 0 0 2px $colors$gray100",
-    },
-  },
 })
 
 export const CalendarBody = styled("table", {

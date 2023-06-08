@@ -42,6 +42,10 @@ export const TimePicker = styled("div", {
 export const TimePickerHeader = styled(Text, {
   fontWeight: "$medium",
 
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+
   span: {
     color: "$gray200",
   },

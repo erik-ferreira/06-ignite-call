@@ -1,9 +1,11 @@
 import dayjs from "dayjs"
 import { useState } from "react"
+import { X } from "phosphor-react"
 import { useRouter } from "next/router"
 import { useQuery } from "@tanstack/react-query"
 
 import { Calendar } from "@/src/components/Calendar"
+import { ButtonIcon } from "@/src/components/ButtonIcon"
 
 import { api } from "../../../../../lib/api"
 
@@ -70,6 +72,10 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     onSelectDateTime(dateWithTime)
   }
 
+  function handleCloseTimePicker() {
+    setSelectedDate(null)
+  }
+
   return (
     <Container isTimePickerOpen={isDateSelected}>
       <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
@@ -77,7 +83,13 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
       {isDateSelected && (
         <TimePicker>
           <TimePickerHeader>
-            {weekDay} <span>{describeDate}</span>
+            <div>
+              {weekDay} <span>{describeDate}</span>
+            </div>
+
+            <ButtonIcon onClick={() => handleCloseTimePicker()}>
+              <X />
+            </ButtonIcon>
           </TimePickerHeader>
 
           <TimePickerList>
